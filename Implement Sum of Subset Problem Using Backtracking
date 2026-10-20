@@ -1,0 +1,61 @@
+#include <stdio.h>
+//HEERAL PAHUJA 
+int n;
+int arr[20];
+int target;
+
+unsigned int solutions[1 << 20];
+int count = 0;
+
+void findSubsets(int index, int sum, unsigned int mask)
+{
+    if (sum == target)
+    {
+        solutions[count++] = mask;
+        return;
+    }
+
+    if (index == n)
+        return;
+
+
+    findSubsets(index + 1,
+                sum + arr[index],
+                mask | (1U << index));
+
+    findSubsets(index + 1,
+                sum,
+                mask);
+}
+
+int main()
+{
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    scanf("%d", &target);
+
+    findSubsets(0, 0, 0);
+
+    if (count == 0)
+    {
+        printf("-1\n");
+        return 0;
+    }
+
+    for (int i = count - 1; i >= 0; i--)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (solutions[i] & (1U << j))
+            {
+                printf("%d ", arr[j]);
+            }
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
